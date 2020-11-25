@@ -1,18 +1,17 @@
 import React from 'react';
-import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { Card, Typography, Alert } from 'antd';
+import { Card,Alert } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Form, Input, Button,Select } from 'antd';
-import ReactDOM from 'react-dom';
+import { Divider } from 'antd';
 
 const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  wrapperCol: { span: 8 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { offset: 8, span: 8 },
 };
 
 const Demo = () => {
@@ -49,18 +48,18 @@ const Demo = () => {
 
   return (
     <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-      <Form.Item name="note" label="Note" rules={[{ required: true }]}>
+      <Form.Item name="name" label="Name" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
+      <Form.Item name="type" label="Type" rules={[{ required: true }]}>
         <Select
           placeholder="Select a option and change input text above"
           onChange={onGenderChange}
           allowClear
         >
-          <Option value="male">male</Option>
-          <Option value="female">female</Option>
-          <Option value="other">other</Option>
+          <Option value="male" >webservice</Option>
+          <Option value="female">worker</Option>
+          <Option value="other">task</Option>
         </Select>
       </Form.Item>
       <Form.Item
@@ -90,11 +89,12 @@ const Demo = () => {
   );
 };
 
+
 export default (): React.ReactNode => (
   <PageContainer content=" Application Management">
     <Card>
       <Alert
-        message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
+        message="vela up"
         type="success"
         showIcon
         banner
@@ -103,21 +103,20 @@ export default (): React.ReactNode => (
           marginBottom: 48,
         }}
       />
-      <Typography.Title level={2} style={{ textAlign: 'center' }}>
-        <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
-      </Typography.Title>
-    </Card>
-    <p style={{ textAlign: 'center', marginTop: 24 }}>
-      Want to add more pages? Please refer to{' '}
-      <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-        use block
-      </a>
-      。
+<p>
+      Service
     </p>
-    <Button type="primary">Primary Button</Button>
-    <div id="Demo"/>
+    <Divider dashed orientation="center"/>
+   
+
+       {/* <div id="Demo"/> */}
+    
+    <Demo/>
+
+
+    <Divider dashed orientation="center"/>
+    </Card>
+   
 
   </PageContainer>
 );
-
-ReactDOM.render(<Demo />, document.getElementById("Demo"));
