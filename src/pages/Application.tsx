@@ -1,122 +1,53 @@
-import React from 'react';
-import { Card,Alert } from 'antd';
-import { PageContainer } from '@ant-design/pro-layout';
-import { Form, Input, Button,Select } from 'antd';
-import { Divider } from 'antd';
+import React, { useState } from 'react';
+// 使用 Ant Design 风格
+import FormRender from 'form-render/lib/antd';
+// 使用 Fusion 风格
+// import FormRender from 'form-render/lib/fusion';
+// import '@alifd/next/dist/next.min.css';
 
-const { Option } = Select;
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 8 },
+const schema = {
+  type: 'object',
+  properties: {
+    string: {
+      title: '字符串',
+      type: 'string',
+      'ui:disabled': true,
+    },
+    select: {
+      title: '单选',
+      type: 'string',
+      enum: ['a', 'b', 'c'],
+      enumNames: ['早', '中', '晚'],
+      'ui:width': '50%', // uiSchema 合并到 schema 中（推荐写法，书写便捷）
+    },
+  },
 };
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 8 },
-};
 
-const Demo = () => {
-  const [form] = Form.useForm();
+function Demo() {
+  const [formData, setData] = useState({});
+  const [valid, setValid] = useState([]);
 
-  const onGenderChange = (value: any) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({ note: 'Hi, man!' });
-        return;
-      case 'female':
-        form.setFieldsValue({ note: 'Hi, lady!' });
-        return;
-      case 'other':
-        form.setFieldsValue({ note: 'Hi there!' });
-        return;
+  const onSubmit = () => {
+    // valid 是校验判断的数组，valid 长度为 0 代表校验全部通过
+    if (valid.length > 0) {
+      alert(`校验未通过字段：${valid.toString()}`);
+    } else {
+      alert(JSON.stringify(formData, null, 2));
     }
   };
 
-  const onFinish = (values: any) => {
-    console.log(values);
-  };
-
-  const onReset = () => {
-    form.resetFields();
-  };
-
-  const onFill = () => {
-    form.setFieldsValue({
-      note: 'Hello world!',
-      gender: 'male',
-    });
-  };
-
   return (
-    <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-      <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="type" label="Type" rules={[{ required: true }]}>
-        <Select
-          placeholder="Select a option and change input text above"
-          onChange={onGenderChange}
-          allowClear
-        >
-          <Option value="male" >webservice</Option>
-          <Option value="female">worker</Option>
-          <Option value="other">task</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}
-      >
-        {({ getFieldValue }) => {
-          return getFieldValue('gender') === 'other' ? (
-            <Form.Item name="customizeGender" label="Customize Gender" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-          ) : null;
-        }}
-      </Form.Item>
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-        <Button htmlType="button" onClick={onReset}>
-          Reset
-        </Button>
-        <Button type="link" htmlType="button" onClick={onFill}>
-          Fill form
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-};
-
-
-export default (): React.ReactNode => (
-  <PageContainer content=" Application Management">
-    <Card>
-      <Alert
-        message="vela up"
-        type="success"
-        showIcon
-        banner
-        style={{
-          margin: -12,
-          marginBottom: 48,
-        }}
+    <div style={{ maxWidth: 600 }}>
+      <FormRender
+        schema={schema}
+        formData={formData}
+        onChange={setData}
+        onValidate={setValid}
+        displayType="row" // 详细配置见下
       />
-<p>
-      Service
-    </p>
-    <Divider dashed orientation="center"/>
-   
+      <button onClick={onSubmit}>提交</button>
+    </div>
+  );
+}
 
-       {/* <div id="Demo"/> */}
-    
-    <Demo/>
-
-
-    <Divider dashed orientation="center"/>
-    </Card>
-   
-
-  </PageContainer>
-);
+export default Demo;
