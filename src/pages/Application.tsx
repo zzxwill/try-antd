@@ -4,21 +4,83 @@ import FormRender from 'form-render/lib/antd';
 // 使用 Fusion 风格
 // import FormRender from 'form-render/lib/fusion';
 // import '@alifd/next/dist/next.min.css';
+import { Button } from 'antd';
 
 const schema = {
   type: 'object',
+  required: ['image', 'port'],
   properties: {
-    string: {
-      title: '字符串',
-      type: 'string',
-      'ui:disabled': true,
+    cmd: {
+      title: 'cmd',
+      description: 'Commands to run in the container',
+      type: 'array',
+      items: {
+        type: 'string',
+      },
     },
-    select: {
-      title: '单选',
+    env: {
+      title: 'env',
+      description: 'Define arguments by using environment variables',
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['name'],
+        properties: {
+          name: {
+            title: 'name',
+            description: 'Environment variable name',
+            type: 'string',
+          },
+          value: {
+            title: 'value',
+            description: 'The value of the environment variable',
+            type: 'string',
+          },
+          valueFrom: {
+            title: 'valueFrom',
+            description: 'Specifies a source the value of this var should come from',
+            type: 'object',
+            required: ['secretKeyRef'],
+            properties: {
+              secretKeyRef: {
+                title: 'secretKeyRef',
+                description: "Selects a key of a secret in the pod's namespace",
+                type: 'object',
+                required: ['name', 'key'],
+                properties: {
+                  name: {
+                    title: 'properties',
+                    description: "The name of the secret in the pod's namespace to select from",
+                    type: 'string',
+                  },
+                  key: {
+                    title: 'key',
+                    description: 'The key of the secret to select from. Must be a valid secret key',
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    image: {
+      title: 'image',
+      description: 'Which image would you like to use for your service\n+short=i',
       type: 'string',
-      enum: ['a', 'b', 'c'],
-      enumNames: ['早', '中', '晚'],
-      'ui:width': '50%', // uiSchema 合并到 schema 中（推荐写法，书写便捷）
+    },
+    port: {
+      title: 'port',
+      description: 'Which port do you want customer traffic sent to\n+short=p',
+      type: 'integer',
+      default: 80,
+    },
+    cpu: {
+      title: 'cpu',
+      description:
+        'Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)',
+      type: 'string',
     },
   },
 };
@@ -43,9 +105,9 @@ function Demo() {
         formData={formData}
         onChange={setData}
         onValidate={setValid}
-        displayType="row" // 详细配置见下
+        displayType="column" // 详细配置见下
       />
-      <button onClick={onSubmit}>提交</button>
+      <Button onClick={onSubmit}>提交</Button>
     </div>
   );
 }
