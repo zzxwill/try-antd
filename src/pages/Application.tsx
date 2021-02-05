@@ -6,7 +6,6 @@ import FormRender from 'form-render/lib/antd';
 // import '@alifd/next/dist/next.min.css';
 import { Button } from 'antd';
 
-let schema = {};
 const schema2 = {
   properties: {
     cmd: {
@@ -89,6 +88,7 @@ const schema2 = {
 function Demo() {
   const [formData, setData] = useState({});
   const [valid, setValid] = useState([]);
+  const [schema, setSchema] = useState({});
 
   const onSubmit = () => {
     // valid 是校验判断的数组，valid 长度为 0 代表校验全部通过
@@ -100,7 +100,7 @@ function Demo() {
   };
 
   function onMouseClick() {
-    setData(schema2);
+    setSchema(schema2);
   }
 
   return (
